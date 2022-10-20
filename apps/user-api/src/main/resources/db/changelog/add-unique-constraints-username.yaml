@@ -1,0 +1,9 @@
+databaseChangeLog:
+  - changeSet:
+      id: add-username-unique-constraint
+      author: kenny.karnama
+      changes:
+        - addUniqueConstraint:
+            columnNames: name
+            constraintName: USER_NAME__UNIQUE_CONSTRAINT
+            tableName: users

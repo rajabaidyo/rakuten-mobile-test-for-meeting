@@ -73,6 +73,13 @@
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-jdbc</artifactId>
 		</dependency>
+		<!-- https://mvnrepository.com/artifact/org.springframework.data/spring-data-r2dbc -->
+		<dependency>
+			<groupId>org.springframework.data</groupId>
+			<artifactId>spring-data-r2dbc</artifactId>
+			<version>1.5.5</version>
+		</dependency>
+
 	</dependencies>
 
 	<build>
@@ -106,6 +113,7 @@
 							<apiPackage>com.rakutenmobile.openapi.spring.reactive.api</apiPackage>
 							<modelPackage>com.rakutenmobile.openapi.models</modelPackage>
 							<supportingFilesToGenerate>false</supportingFilesToGenerate>
+							<templateDirectory>src/main/resources/openapi-templates</templateDirectory>
 							<configOptions>
 								<reactive>true</reactive>
 								<interfaceOnly>true</interfaceOnly>

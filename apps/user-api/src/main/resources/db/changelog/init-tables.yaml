@@ -17,11 +17,17 @@ databaseChangeLog:
                     primaryKeyName: USERS_PK
                   name: user_id
                   type: UUID
+                  defaultValueComputed: gen_random_uuid()
               - column:
                   constraints:
                     nullable: false
                   name: name
                   type: VARCHAR(255)
+              - column:
+                  constraints:
+                    nullable: false
+                  name: password
+                  type: TEXT
               - column:
                   constraints:
                     nullable: false

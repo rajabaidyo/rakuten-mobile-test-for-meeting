@@ -85,18 +85,19 @@ components:
           type: string
         name:
           type: string
-        createdAt:
-          type: string
-          format: date-time
     RegisterRequest:
       type: object
       required:
         - name
+        - password
       properties:
         name:
           type: string
           minLength: 5
           maxLength: 255
+        password:
+          type: string
+          minLength: 4
     Error:
       type: object
       properties:
