@@ -3,19 +3,23 @@ package com.rakutenmobile.userapi.user.adapter.in.restful.reactive;
 import com.rakutenmobile.openapi.models.RegisterRequest;
 import com.rakutenmobile.openapi.models.User;
 import com.rakutenmobile.openapi.spring.reactive.api.RegisterApi;
+import com.rakutenmobile.openapi.spring.reactive.api.ValidateApi;
 import com.rakutenmobile.userapi.user.application.port.in.AddUserUseCase;
+import com.rakutenmobile.userapi.user.application.port.out.GetUserUseCase;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ServerWebExchange;
 import reactor.core.publisher.Mono;
 @RestController
-public class UserController implements RegisterApi {
+public class UserController implements RegisterApi, ValidateApi {
 
     private final AddUserUseCase addUserUseCase;
+    private final GetUserUseCase getUserUseCase;
 
-    public UserController(AddUserUseCase addUserUseCase) {
+    public UserController(AddUserUseCase addUserUseCase, GetUserUseCase getUserUseCase) {
         this.addUserUseCase = addUserUseCase;
+        this.getUserUseCase = getUserUseCase;
     }
 
     @Override
@@ -27,5 +31,11 @@ public class UserController implements RegisterApi {
             userDto.setName(resp.getName());
             return new ResponseEntity<>(userDto, HttpStatus.CREATED);
         });
+    }
+
+    @Override
+    public Mono<ResponseEntity<User>> validateGet(ServerWebExchange exchange) {
+
+        return null;
     }
 }

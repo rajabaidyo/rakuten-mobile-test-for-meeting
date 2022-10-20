@@ -5,9 +5,6 @@ import lombok.Value;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.relational.core.mapping.Table;
 
-import java.util.Optional;
-import java.util.UUID;
-
 @Value
 @Builder
 @Table(name = "users")

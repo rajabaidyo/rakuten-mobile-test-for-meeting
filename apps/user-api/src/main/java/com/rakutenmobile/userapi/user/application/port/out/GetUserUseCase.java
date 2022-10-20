@@ -1,9 +1,10 @@
 package com.rakutenmobile.userapi.user.application.port.out;
 
 import com.rakutenmobile.userapi.user.domain.User;
+import reactor.core.publisher.Mono;
 
-import java.util.Optional;
+import java.util.UUID;
 
 public interface GetUserUseCase {
-    Optional<User> GetUserByIdAndPassword(java.util.UUID userId, String password);
+    Mono<User> getUserById(UUID userId);
 }
