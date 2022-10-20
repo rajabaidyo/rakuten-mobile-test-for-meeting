@@ -8,6 +8,9 @@ import com.rakutenmobile.userapi.user.application.port.in.AddUserUseCase;
 import com.rakutenmobile.userapi.user.application.port.out.GetUserUseCase;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.ReactiveSecurityContextHolder;
+import org.springframework.security.core.context.SecurityContext;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ServerWebExchange;
 import reactor.core.publisher.Mono;
@@ -35,7 +38,12 @@ public class UserController implements RegisterApi, ValidateApi {
 
     @Override
     public Mono<ResponseEntity<User>> validateGet(ServerWebExchange exchange) {
-
-        return null;
+        Mono<UserDetails> userDetail = ReactiveSecurityContextHolder.getContext()
+                .map(context -> context.getAuthentication().getPrincipal()).cast(UserDetails.class);
+        return userDetail.map(resp -> {
+            final User userDto = new User();
+            userDto.setUserId(resp.getUsername());
+            return new ResponseEntity<>(userDto, HttpStatus.OK);
+        });
     }
 }
