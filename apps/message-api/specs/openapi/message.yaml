@@ -1,0 +1,213 @@
+openapi: '3.0.3'
+info:
+  version: 1.0.0
+  title: Message API for Rakuten Mobile test
+  termsOfService: https://swagger.io
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org
+  contact:
+    name: kenny.karnama
+    email: kennykarnama@gmail.com
+servers:
+  - url: http://localhost
+    description: local environment
+paths:
+  /message/{id}:
+    get:
+      tags:
+        - "Message API"
+      summary: Get message by Id
+      description: ''
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: 'Message detail'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Message'
+        '404':
+          description: 'Message not found'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '400':
+          description: 'Bad request'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+    delete:
+      tags:
+        - "Message API"
+      summary: Delete message by Id
+      description: Delete message by Id. Only permitted if the message is owned by the user.
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '204':
+          description: OK
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+        '403':
+          $ref: '#/components/responses/ForbiddenError'
+        '400':
+          description: 'Bad request'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '500':
+          $ref: '#/components/schemas/Error'
+  /messages:
+    get:
+      tags:
+        - "Message API"
+      summary: List messages
+      description: ''
+      parameters:
+        - in: query
+          name: page
+          schema:
+            type: integer
+            default: 1
+        - in: query
+          name: pageSize
+          schema:
+            type: integer
+            default: 10
+        - in: query
+          name: user_id
+          schema:
+            type: string
+        - in: query
+          name: topic
+          schema:
+            type: string
+      responses:
+        '200':
+          $ref: '#/components/responses/ListMessagesResponse'
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+        '500':
+          $ref: '#/components/schemas/Error'
+    post:
+      tags:
+        - "Message API"
+      summary: Post new messages
+      description: ''
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                $ref: '#/components/schemas/SubmitMessageRequest'
+      responses:
+        '201':
+          description: Messages created
+        '404':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '500':
+          $ref: '#/components/schemas/Error'
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+
+components:
+  responses:
+    ForbiddenError:
+      description: Operation is forbidden
+    UnauthorizedError:
+      description: Authentication information is missing or invalid
+      headers:
+        WWW_Authenticate:
+          schema:
+            type: string
+    ListMessagesResponse:
+      description: List messages with pagination
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              pagination:
+                $ref: '#/components/schemas/Pagination'
+              items:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Message'
+  securitySchemes:
+    basicAuth:
+      type: http
+      scheme: basic
+  schemas:
+    Pagination:
+      type: object
+      properties:
+        page:
+          type: integer
+        pageSize:
+          type: integer
+        totalPage:
+          type: integer
+        totalItems:
+          type: integer
+          format: int64
+    SubmitMessageRequest:
+      type: object
+      required:
+        - topic
+        - content
+      properties:
+        topic:
+          type: string
+        content:
+          type: string
+    Message:
+      type: object
+      required:
+        - id
+        - user_id
+        - topic
+        - content
+        - created_at
+      properties:
+        id:
+          type: string
+          format: uuid
+        user_id:
+          type: string
+        topic:
+          type: string
+        content:
+          type: string
+        created_at:
+          type: string
+          format: date-time
+    Error:
+      type: object
+      properties:
+        errorCode:
+          type: string
+        errorMessage:
+          type: string

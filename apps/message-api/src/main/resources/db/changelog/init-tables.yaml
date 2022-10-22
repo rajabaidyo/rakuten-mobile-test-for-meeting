@@ -1,0 +1,47 @@
+databaseChangeLog:
+  - changeSet:
+      id: create-table-messages
+      author: kenny.karnama
+      preConditions:
+        - onFail: MARK_RAN
+          not:
+            tableExists:
+              tableName: messages
+      changes:
+        - createTable:
+            columns:
+              - column:
+                  constraints:
+                    nullable: false
+                    primaryKey: true
+                    primaryKeyName: MESSAGES_PK
+                  name: id
+                  type: UUID
+                  defaultValueComputed: gen_random_uuid()
+              - column:
+                  constraints:
+                    nullable: false
+                  name: user_id
+                  type: TEXT
+              - column:
+                  constraints:
+                    nullable: false
+                  name: topic
+                  type: VARCHAR(512)
+              - column:
+                  constraints:
+                    nullable: false
+                  name: content
+                  type: TEXT
+              - column:
+                  constraints:
+                    nullable: false
+                  name: created_at
+                  type: timestamp with time zone
+                  defaultValueComputed: CURRENT_TIMESTAMP()
+              - column:
+                  constraints:
+                    nullable: true
+                  name: deleted_at
+                  type: timestamp with time zone
+            tableName: messages
