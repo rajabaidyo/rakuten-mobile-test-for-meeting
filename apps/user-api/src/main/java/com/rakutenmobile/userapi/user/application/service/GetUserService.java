@@ -21,7 +21,12 @@ public class GetUserService implements GetUserUseCase {
         return userRepository.findById(userId)
                 .switchIfEmpty(Mono.defer(() -> Mono.error(new UserNotFoundException("User Not Found"))))
                 .map(x -> {
-                   final User user = User.builder().userId(x.getUserId()).name(x.getName()).password(x.getPassword()).build();
+                   final User user = User.builder()
+                           .userId(x.getUserId())
+                           .name(x.getName())
+                           .password(x.getPassword())
+                           .createdAt(x.getCreatedAt())
+                           .build();
                    return user;
                 });
     }

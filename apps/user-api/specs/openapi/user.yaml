@@ -5,12 +5,12 @@ info:
   termsOfService: https://swagger.io
   license:
     name: Apache 2.0
-    url: http://www.apache.org
+    url: https://www.apache.org
   contact:
     name: kenny.karnama
     email: kennykarnama@gmail.com
 servers:
-  - url: http://localhost
+  - url: http://localhost:8080
     description: local environment
 paths:
   /validate:
@@ -35,7 +35,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Error'
+                $ref: '#/components/schemas/ErrorResponse'
   /register:
     post:
       tags:
@@ -60,8 +60,19 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Error'
-
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Internal server error. Error message will be hidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '415':
+          description: Unprocessable entity
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
 components:
   responses:
     UnauthorizedError:
@@ -78,13 +89,19 @@ components:
     User:
       type: object
       required:
-        - userId
+        - user_id
         - name
       properties:
-        userId:
+        user_id:
           type: string
         name:
           type: string
+        role:
+          type: string
+          default: "USER"
+        created_at:
+          type: string
+          format: date-time
     RegisterRequest:
       type: object
       required:
@@ -98,10 +115,11 @@ components:
         password:
           type: string
           minLength: 4
-    Error:
+    ErrorResponse:
       type: object
       properties:
-        errorCode:
-          type: string
-        errorMessage:
+        error_code:
+          type: int
+          format: int64
+        error_message:
           type: string

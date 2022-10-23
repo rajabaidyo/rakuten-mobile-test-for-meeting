@@ -4,6 +4,7 @@ import com.rakutenmobile.openapi.models.RegisterRequest;
 import com.rakutenmobile.openapi.models.User;
 import com.rakutenmobile.openapi.spring.reactive.api.RegisterApi;
 import com.rakutenmobile.openapi.spring.reactive.api.ValidateApi;
+import com.rakutenmobile.userapi.user.adapter.in.restful.auth.CustomUserDetails;
 import com.rakutenmobile.userapi.user.application.port.in.AddUserUseCase;
 import com.rakutenmobile.userapi.user.application.port.out.GetUserUseCase;
 import org.springframework.http.HttpStatus;
@@ -38,11 +39,14 @@ public class UserController implements RegisterApi, ValidateApi {
 
     @Override
     public Mono<ResponseEntity<User>> validateGet(ServerWebExchange exchange) {
-        Mono<UserDetails> userDetail = ReactiveSecurityContextHolder.getContext()
-                .map(context -> context.getAuthentication().getPrincipal()).cast(UserDetails.class);
+        Mono<CustomUserDetails> userDetail = ReactiveSecurityContextHolder.getContext()
+                .map(context -> context.getAuthentication().getPrincipal()).cast(CustomUserDetails.class);
         return userDetail.map(resp -> {
             final User userDto = new User();
             userDto.setUserId(resp.getUsername());
+            userDto.setName(resp.getName());
+            userDto.setCreatedAt(resp.getCreatedAt());
+            userDto.setRole(resp.stringAuthorities());
             return new ResponseEntity<>(userDto, HttpStatus.OK);
         });
     }
