@@ -135,6 +135,7 @@
 				</executions>
 			</plugin>
 		</plugins>
+		<finalName>user-api-docker</finalName>
 	</build>
 
 </project>

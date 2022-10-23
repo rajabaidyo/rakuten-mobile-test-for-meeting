@@ -15,16 +15,17 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 public class Publisher implements PublishMessageUseCase {
-    private static final String TOPIC = "send-message";
+    private String kafkaTopic;
 
     private final ReactiveKafkaProducerTemplate<String, String> kafka;
 
-    private Validator validator;
+    private final Validator validator;
 
-    public Publisher(ReactiveKafkaProducerTemplate<String, String> kafka) {
+    public Publisher(ReactiveKafkaProducerTemplate<String, String> kafka, String kafkaSendTopic) {
         this.kafka = kafka;
         ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
         this.validator = factory.getValidator();
+        this.kafkaTopic = kafkaSendTopic;
     }
 
     @Override
@@ -47,7 +48,7 @@ public class Publisher implements PublishMessageUseCase {
             } catch (JsonProcessingException e) {
                 throw new RuntimeException(e);
             }
-            return kafka.send(TOPIC, json).subscribe();
+            return kafka.send(kafkaTopic, json).subscribe();
         }).then();
     }
 }

@@ -167,6 +167,7 @@
 				</executions>
 			</plugin>
 		</plugins>
+		<finalName>message-api-docker</finalName>
 	</build>
 	<repositories>
 		<repository>

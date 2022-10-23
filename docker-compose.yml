@@ -2,6 +2,12 @@ version: '3'
 services:
   zookeeper:
     image: confluentinc/cp-zookeeper:latest
+    deploy:
+     restart_policy:
+       condition: on-failure
+       delay: 5s
+       max_attempts: 5
+       window: 120s
     environment:
       ZOOKEEPER_CLIENT_PORT: 2181
       ZOOKEEPER_TICK_TIME: 2000
@@ -15,6 +21,12 @@ services:
     depends_on:
       - zookeeper
       - kafka
+    deploy:
+      restart_policy:
+         condition: on-failure
+         delay: 5s
+         max_attempts: 5
+         window: 120s
     ports:
       - "8081:8081"
     environment:
@@ -27,12 +39,84 @@ services:
     image: confluentinc/cp-kafka:latest
     depends_on:
       - zookeeper
+    deploy:
+      restart_policy:
+         condition: on-failure
+         delay: 5s
+         max_attempts: 5
+         window: 120s
     ports:
       - 29092:29092
     environment:
       KAFKA_BROKER_ID: 1
       KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
-      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:9092,PLAINTEXT_HOST://localhost:29092
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:29092,PLAINTEXT_HOST://localhost:29093
       KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT
       KAFKA_INTER_BROKER_LISTENER_NAME: PLAINTEXT
       KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+
+  user-api-db:
+    image: postgres
+    ports:
+      - "5432:5432"
+    environment:
+      - POSTGRES_PASSWORD=rakuten123
+      - POSTGRES_USER=postgres
+      - POSTGRES_DB=rakuten_mobile
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U postgres" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  message-api-db:
+    image: postgres
+    ports:
+      - "5433:5432"
+    environment:
+      - POSTGRES_PASSWORD=rakuten123
+      - POSTGRES_USER=postgres
+      - POSTGRES_DB=message_api
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U postgres" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  user-api:
+    build: apps/user-api/.
+    ports:
+      - "8080:8080"
+    environment:
+      - SPRING_LIQUIBASE_URL=jdbc:postgresql://user-api-db:5432/rakuten_mobile
+      - SPRING_R2DBC_URL=r2dbc:postgresql://user-api-db:5432/rakuten_mobile
+    deploy:
+      restart_policy:
+         condition: on-failure
+         delay: 5s
+         max_attempts: 5
+         window: 120s
+    depends_on:
+      - user-api-db
+
+  message-api:
+    build: apps/message-api/.
+    ports:
+      - "8082:8082"
+    environment:
+      - SPRING_LIQUIBASE_URL=jdbc:postgresql://message-api-db:5432/message_api
+      - SPRING_R2DBC_URL=r2dbc:postgresql://message-api-db:5432/message_api
+      - SPRING_KAFKA_CONSUMER_BOOTSTRAPSERVERS=kafka:29092
+      - SPRING_KAFKA_PRODUCER_BOOTSTRAPSERVERS=kafka:29092
+      - APP_KAFKA_TOPIC_SENDMESSAGE=send-message-docker
+      - APP_AUTH_SERVER_BASEURL=user-api:8080
+    deploy:
+      restart_policy:
+        condition: on-failure
+        delay: 5s
+        max_attempts: 5
+        window: 120s
+    depends_on:
+      - schema_registry
+      - user-api
+      - message-api-db
