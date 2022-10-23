@@ -29,9 +29,9 @@ public class UserApi implements ReactiveAuthenticationManager {
             try {
                 Map<String, String> resp = mapper.readValue(v, Map.class);
                 User.UserBuilder userBuilder = User.builder();
-                UserDetails userDetail = userBuilder.username(resp.get("userId"))
+                UserDetails userDetail = userBuilder.username(resp.get("user_id"))
                         .password("")
-                        .roles("USER")
+                        .roles(resp.get("role"))
                         .build();
                 return new TokenHolder(userDetail, credentials, userDetail.getAuthorities());
             } catch (JsonProcessingException e) {
