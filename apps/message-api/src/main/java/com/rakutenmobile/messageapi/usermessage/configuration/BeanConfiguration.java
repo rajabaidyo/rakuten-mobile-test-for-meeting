@@ -11,11 +11,9 @@ import com.rakutenmobile.messageapi.usermessage.port.out.PublishMessageUseCase;
 import com.rakutenmobile.messageapi.usermessage.port.service.MessageService;
 import org.apache.kafka.clients.consumer.ConsumerConfig;
 import org.apache.kafka.clients.producer.ProducerConfig;
+import org.apache.kafka.common.TopicPartition;
 import org.apache.kafka.common.serialization.StringDeserializer;
 import org.apache.kafka.common.serialization.StringSerializer;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.autoconfigure.web.WebProperties;
 import org.springframework.boot.web.reactive.error.DefaultErrorAttributes;
@@ -29,7 +27,11 @@ import org.springframework.core.env.Environment;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.codec.ServerCodecConfigurer;
+import org.springframework.kafka.core.DefaultKafkaProducerFactory;
+import org.springframework.kafka.core.KafkaOperations;
+import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.kafka.core.reactive.ReactiveKafkaProducerTemplate;
+import org.springframework.kafka.listener.DeadLetterPublishingRecoverer;
 import org.springframework.web.bind.support.WebExchangeBindException;
 import org.springframework.web.reactive.function.client.WebClientResponseException;
 import org.springframework.web.server.ServerWebInputException;
@@ -76,6 +78,7 @@ public class BeanConfiguration {
     String authServerBaseUrl() {
         return env.getRequiredProperty("app.auth.server.base-url");
     }
+
     @Bean
     public ReactiveKafkaProducerTemplate<String, String> reactiveKafkaProducerTemplate() {
         Map<String, Object> props = new HashMap<>();
@@ -129,6 +132,20 @@ public class BeanConfiguration {
         exceptionHandler.setMessageWriters(configurer.getWriters());
         exceptionHandler.setMessageReaders(configurer.getReaders());
         return exceptionHandler;
+    }
+
+    private KafkaOperations<String, Object> getEventKafkaTemplate() {
+        Map<String, Object> props = new HashMap<>();
+        props.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, env.getRequiredProperty("spring.kafka.producer.bootstrap-servers"));
+        props.put(ProducerConfig.CLIENT_ID_CONFIG, CLIENT_ID_CONFIG);
+        props.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class.getName());
+        props.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, StringSerializer.class.getName());
+        return new KafkaTemplate<>(new DefaultKafkaProducerFactory<>(props));
+    }
+    @Bean
+    public DeadLetterPublishingRecoverer deadLetterPublishingRecoverer() {
+        return new DeadLetterPublishingRecoverer(getEventKafkaTemplate(),
+                (record, ex) -> new TopicPartition(kafkaDeadLetterTopic(), 1));
     }
 
 }
