@@ -38,13 +38,13 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Error'
+                $ref: '#/components/schemas/ErrorResponse'
         '400':
           description: 'Bad request'
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Error'
+                $ref: '#/components/schemas/ErrorResponse'
         '401':
           $ref: '#/components/responses/UnauthorizedError'
     delete:
@@ -71,9 +71,9 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Error'
+                $ref: '#/components/schemas/ErrorResponse'
         '500':
-          $ref: '#/components/schemas/Error'
+          $ref: '#/components/schemas/ErrorResponse'
   /messages:
     get:
       tags:
@@ -105,7 +105,7 @@ paths:
         '401':
           $ref: '#/components/responses/UnauthorizedError'
         '500':
-          $ref: '#/components/schemas/Error'
+          $ref: '#/components/schemas/ErrorResponse'
     post:
       tags:
         - "Message API"
@@ -127,9 +127,9 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Error'
+                $ref: '#/components/schemas/ErrorResponse'
         '500':
-          $ref: '#/components/schemas/Error'
+          $ref: '#/components/schemas/ErrorResponse'
         '401':
           $ref: '#/components/responses/UnauthorizedError'
 
@@ -204,10 +204,10 @@ components:
         created_at:
           type: string
           format: date-time
-    Error:
+    ErrorResponse:
       type: object
       properties:
         errorCode:
-          type: string
+          type: integer
         errorMessage:
           type: string

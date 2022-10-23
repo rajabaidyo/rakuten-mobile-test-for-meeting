@@ -3,10 +3,11 @@ package com.rakutenmobile.messageapi.usermessage.adapter.out.kafka;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
 
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotEmpty;
+
 @Data
 public  class UserMessageDto {
-    @JsonProperty
-    public java.util.UUID id;
     @JsonProperty
     public String content;
     @JsonProperty
@@ -20,8 +21,7 @@ public  class UserMessageDto {
 
     }
 
-    public UserMessageDto(java.util.UUID id, String content, String topic, java.time.OffsetDateTime createdAt, String userId) {
-        this.id = id;
+    public UserMessageDto(String content, String topic, java.time.OffsetDateTime createdAt, String userId) {
         this.content = content;
         this.topic = topic;
         this.createdAt = createdAt;

@@ -10,19 +10,33 @@ import org.springframework.kafka.core.reactive.ReactiveKafkaProducerTemplate;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
+import javax.validation.*;
+import java.util.Set;
+import java.util.stream.Collectors;
+
 public class Publisher implements PublishMessageUseCase {
     private static final String TOPIC = "send-message";
 
     private final ReactiveKafkaProducerTemplate<String, String> kafka;
 
+    private Validator validator;
+
     public Publisher(ReactiveKafkaProducerTemplate<String, String> kafka) {
         this.kafka = kafka;
+        ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
+        this.validator = factory.getValidator();
     }
 
     @Override
     public Mono<Void> publish(Flux<UserMessage> messages) {
-        return messages.map(message -> {
-            UserMessageDto dto = new UserMessageDto(message.getId(),
+        return messages
+                .map(message -> {
+                    UserMessageDto dto = new UserMessageDto(
+                            message.getContent(), message.getTopic(), message.getCreatedAt(), message.getUserId());
+                    return dto;
+                })
+                .map(message -> {
+            UserMessageDto dto = new UserMessageDto(
                     message.getContent(), message.getTopic(), message.getCreatedAt(), message.getUserId());
             ObjectMapper mapper = JsonMapper.builder()
                     .addModule(new JavaTimeModule())

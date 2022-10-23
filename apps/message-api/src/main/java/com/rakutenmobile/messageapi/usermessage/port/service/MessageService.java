@@ -47,11 +47,22 @@ public class MessageService implements MessageUseCase {
 
     @Override
     public Mono<Void> deleteMessageById(UUID id) {
-       return ReactiveSecurityContextHolder.getContext()
-                .map(context -> context.getAuthentication().getPrincipal()).cast(UserDetails.class)
-               .flatMap(v -> messageRepository.findMessageEntityByIdAndUserId(id, v.getUsername()))
-               .switchIfEmpty(Mono.defer(() -> Mono.error(new MessageNotOwnedException("Forbid to delete other user's message"))))
-               .flatMap(d -> messageRepository.deleteById(id)).then();
+        return messageRepository.findById(id)
+                .switchIfEmpty(Mono.error(new MessageNotFoundException("message not found")))
+                .then(ReactiveSecurityContextHolder.getContext())
+                .map(context -> context.getAuthentication().getPrincipal())
+                .cast(UserDetails.class)
+                .flatMap(v -> messageRepository.findMessageEntityByIdAndUserId(id, v.getUsername()))
+                .switchIfEmpty(
+                        Mono.defer(
+                                () -> Mono.error(
+                                        new MessageNotOwnedException(
+                                                "Forbid to delete other user's message"
+                                        )
+                                )
+                        )
+                ).flatMap(d -> messageRepository.deleteById(id))
+                .then();
     }
 
     @Override

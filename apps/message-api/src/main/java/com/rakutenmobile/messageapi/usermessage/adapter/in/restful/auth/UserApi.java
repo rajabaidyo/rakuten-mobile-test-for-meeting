@@ -2,6 +2,8 @@ package com.rakutenmobile.messageapi.usermessage.adapter.in.restful.auth;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.rakutenmobile.messageapi.usermessage.domain.exception.MessageNotFoundException;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.ReactiveAuthenticationManager;
 import org.springframework.security.core.Authentication;
@@ -22,7 +24,8 @@ public class UserApi implements ReactiveAuthenticationManager {
         String credentials = (String) authentication.getCredentials();
         WebClient webClient = WebClient.builder().baseUrl("http://localhost:8080/validate")
                 .defaultHeader("Authorization", credentials).build();
-        Mono<String> res = webClient.get().retrieve().bodyToMono(String.class);
+        Mono<String> res = webClient.get().retrieve()
+                .bodyToMono(String.class);
         return res
                 .map(v -> {
             ObjectMapper mapper = new ObjectMapper();

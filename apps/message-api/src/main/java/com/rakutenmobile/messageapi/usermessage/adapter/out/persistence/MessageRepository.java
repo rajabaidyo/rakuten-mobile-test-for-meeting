@@ -10,6 +10,7 @@ import reactor.core.publisher.Mono;
 @Repository
 public interface MessageRepository extends ReactiveSortingRepository<MessageEntity, java.util.UUID> {
     Mono<MessageEntity> findMessageEntityByIdAndUserId(java.util.UUID id, String userId);
+    Mono<MessageEntity> findMessageEntityById(java.util.UUID id);
     Flux<MessageEntity> findAllBy(Pageable pageable);
     Flux<MessageEntity> findAllByUserId(Pageable pageable, String userId);
     Flux<MessageEntity> findAllByTopicContainsIgnoreCase(Pageable pageable, String topic);
