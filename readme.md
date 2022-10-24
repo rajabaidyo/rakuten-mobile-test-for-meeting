@@ -44,9 +44,17 @@ Just run
 
 Postman collection:
 
+**Direct link**
+
 [user-api](https://www.getpostman.com/collections/c1dbcf01de90ba3209aa)
 
 [message-api](https://www.getpostman.com/collections/11e6d0861b599ee700e5)
+
+**Files**
+
+[user-api.json](misc/postman/user-api.postman_collection.json)
+
+[message-api.json](misc/postman/message-api.postman_collection.json)
 
 Authorization:
 

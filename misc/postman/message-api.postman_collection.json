@@ -1,0 +1,638 @@
+{
+	"info": {
+		"_postman_id": "05baa771-c491-4a3a-bb47-f93e6f9e4c80",
+		"name": "message-api",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "3737540"
+	},
+	"item": [
+		{
+			"name": "Submit messages",
+			"request": {
+				"auth": {
+					"type": "basic",
+					"basic": [
+						{
+							"key": "username",
+							"value": "a5880187-13fb-491f-8bde-1a7d383bf35a",
+							"type": "string"
+						},
+						{
+							"key": "password",
+							"value": "test123",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "[\r\n    {\r\n        \"content\": \"first message start test\",\r\n        \"topic\":\"first-topic\"\r\n    }\r\n]",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8082/messages",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8082",
+					"path": [
+						"messages"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Submit messages Triggers error",
+			"request": {
+				"auth": {
+					"type": "basic",
+					"basic": [
+						{
+							"key": "username",
+							"value": "a5880187-13fb-491f-8bde-1a7d383bf35a",
+							"type": "string"
+						},
+						{
+							"key": "password",
+							"value": "test123",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "[\r\n    {\r\n        \"content\": \"you are a dog\",\r\n        \"topic\":\"forbidden-words\"\r\n    }\r\n]",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8082/messages",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8082",
+					"path": [
+						"messages"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Submit messages Missing Required attribute",
+			"request": {
+				"auth": {
+					"type": "basic",
+					"basic": [
+						{
+							"key": "username",
+							"value": "a5880187-13fb-491f-8bde-1a7d383bf35a",
+							"type": "string"
+						},
+						{
+							"key": "password",
+							"value": "test123",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "[\r\n    {\r\n        \"content\": \"topik kosong\"\r\n    },\r\n    {\r\n        \"content\": \"topik ndk kosong\",\r\n        \"topic\": \"test-req\"\r\n    }\r\n]",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8082/messages",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8082",
+					"path": [
+						"messages"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Submit messages Missing Required content attribute",
+			"request": {
+				"auth": {
+					"type": "basic",
+					"basic": [
+						{
+							"key": "password",
+							"value": "test123",
+							"type": "string"
+						},
+						{
+							"key": "username",
+							"value": "0c6a52a1-0ad9-4e91-8e9c-954eddaf852b",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "[\r\n    {\r\n        \"topic\": \"content-kosong\"\r\n    },\r\n    {\r\n        \"content\": \"topik ndk kosong\",\r\n        \"topic\": \"test-req\"\r\n    }\r\n]",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8082/messages",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8082",
+					"path": [
+						"messages"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get message By Id",
+			"request": {
+				"auth": {
+					"type": "basic",
+					"basic": [
+						{
+							"key": "username",
+							"value": "5557abfd-e585-4b5d-b5c9-7c11d9acb1c7",
+							"type": "string"
+						},
+						{
+							"key": "password",
+							"value": "test123",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8082/message/66d0608f-0482-44c4-bb79-fed4c4b23d34",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8082",
+					"path": [
+						"message",
+						"66d0608f-0482-44c4-bb79-fed4c4b23d34"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get message By Id Not found",
+			"request": {
+				"auth": {
+					"type": "basic",
+					"basic": [
+						{
+							"key": "password",
+							"value": "test123",
+							"type": "string"
+						},
+						{
+							"key": "username",
+							"value": "0c6a52a1-0ad9-4e91-8e9c-954eddaf852b",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8082/message/1e03a578-6b5d-4da6-88d7-78d19710fb12",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8082",
+					"path": [
+						"message",
+						"1e03a578-6b5d-4da6-88d7-78d19710fb12"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get message By Id Invalid param",
+			"request": {
+				"auth": {
+					"type": "basic",
+					"basic": [
+						{
+							"key": "password",
+							"value": "test123",
+							"type": "string"
+						},
+						{
+							"key": "username",
+							"value": "0c6a52a1-0ad9-4e91-8e9c-954eddaf852b",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8082/message/1e03a578-6b5d",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8082",
+					"path": [
+						"message",
+						"1e03a578-6b5d"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get message By Id Invalid creds",
+			"request": {
+				"auth": {
+					"type": "basic",
+					"basic": [
+						{
+							"key": "password",
+							"value": "test12",
+							"type": "string"
+						},
+						{
+							"key": "username",
+							"value": "0c6a52a1-0ad9-4e91-8e9c-954eddaf852b",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8082/message/1e03a578-6b5d",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8082",
+					"path": [
+						"message",
+						"1e03a578-6b5d"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "List messages",
+			"request": {
+				"auth": {
+					"type": "basic",
+					"basic": [
+						{
+							"key": "username",
+							"value": "5557abfd-e585-4b5d-b5c9-7c11d9acb1c7",
+							"type": "string"
+						},
+						{
+							"key": "password",
+							"value": "test123",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8082/messages?page=1&pageSize=5",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8082",
+					"path": [
+						"messages"
+					],
+					"query": [
+						{
+							"key": "page",
+							"value": "1"
+						},
+						{
+							"key": "pageSize",
+							"value": "5"
+						},
+						{
+							"key": "user_id",
+							"value": "arcadia",
+							"disabled": true
+						},
+						{
+							"key": "topic",
+							"value": "meong",
+							"disabled": true
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "List messages Negative page",
+			"request": {
+				"auth": {
+					"type": "basic",
+					"basic": [
+						{
+							"key": "password",
+							"value": "test123",
+							"type": "string"
+						},
+						{
+							"key": "username",
+							"value": "0c6a52a1-0ad9-4e91-8e9c-954eddaf852b",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8082/messages?page=-1&pageSize=5&user_id=arcadia&topic=meong",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8082",
+					"path": [
+						"messages"
+					],
+					"query": [
+						{
+							"key": "page",
+							"value": "-1"
+						},
+						{
+							"key": "pageSize",
+							"value": "5"
+						},
+						{
+							"key": "user_id",
+							"value": "arcadia"
+						},
+						{
+							"key": "topic",
+							"value": "meong"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "List messages PageRequest < 10",
+			"request": {
+				"auth": {
+					"type": "basic",
+					"basic": [
+						{
+							"key": "password",
+							"value": "test123",
+							"type": "string"
+						},
+						{
+							"key": "username",
+							"value": "0c6a52a1-0ad9-4e91-8e9c-954eddaf852b",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8082/messages?page=1&pageSize=5&user_id=arcadia&topic=meong",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8082",
+					"path": [
+						"messages"
+					],
+					"query": [
+						{
+							"key": "page",
+							"value": "1"
+						},
+						{
+							"key": "pageSize",
+							"value": "5"
+						},
+						{
+							"key": "user_id",
+							"value": "arcadia"
+						},
+						{
+							"key": "topic",
+							"value": "meong"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "List messages Empty userID but topic exists",
+			"request": {
+				"auth": {
+					"type": "basic",
+					"basic": [
+						{
+							"key": "password",
+							"value": "test123",
+							"type": "string"
+						},
+						{
+							"key": "username",
+							"value": "0c6a52a1-0ad9-4e91-8e9c-954eddaf852b",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8082/messages?page=1&pageSize=5&topic=meong",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8082",
+					"path": [
+						"messages"
+					],
+					"query": [
+						{
+							"key": "page",
+							"value": "1"
+						},
+						{
+							"key": "pageSize",
+							"value": "5"
+						},
+						{
+							"key": "user_id",
+							"value": "arcadia",
+							"disabled": true
+						},
+						{
+							"key": "topic",
+							"value": "meong"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Delete Message By ID",
+			"request": {
+				"auth": {
+					"type": "basic",
+					"basic": [
+						{
+							"key": "password",
+							"value": "test123",
+							"type": "string"
+						},
+						{
+							"key": "username",
+							"value": "0c6a52a1-0ad9-4e91-8e9c-954eddaf852b",
+							"type": "string"
+						}
+					]
+				},
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8082/message/801d1593-6582-4cfc-b0b8-f24965260287",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8082",
+					"path": [
+						"message",
+						"801d1593-6582-4cfc-b0b8-f24965260287"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Delete Message By ID Forbidden",
+			"request": {
+				"auth": {
+					"type": "basic",
+					"basic": [
+						{
+							"key": "password",
+							"value": "test123",
+							"type": "string"
+						},
+						{
+							"key": "username",
+							"value": "0c6a52a1-0ad9-4e91-8e9c-954eddaf852b",
+							"type": "string"
+						}
+					]
+				},
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8082/message/ffd551cf-be68-48b0-8456-748cf05db4a0",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8082",
+					"path": [
+						"message",
+						"ffd551cf-be68-48b0-8456-748cf05db4a0"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Delete Message By ID Not Found",
+			"request": {
+				"auth": {
+					"type": "basic",
+					"basic": [
+						{
+							"key": "password",
+							"value": "test123",
+							"type": "string"
+						},
+						{
+							"key": "username",
+							"value": "0c6a52a1-0ad9-4e91-8e9c-954eddaf852b",
+							"type": "string"
+						}
+					]
+				},
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8082/message/194bc524-85ae-460c-bfdb-9e3a1c61c3e3",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8082",
+					"path": [
+						"message",
+						"194bc524-85ae-460c-bfdb-9e3a1c61c3e3"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
