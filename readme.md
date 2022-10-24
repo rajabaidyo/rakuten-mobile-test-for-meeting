@@ -42,6 +42,16 @@ Just run
 
 `docker-compose up -d --build`
 
+Postman collection:
+
+[user-api](https://www.getpostman.com/collections/c1dbcf01de90ba3209aa)
+
+[message-api](https://www.getpostman.com/collections/11e6d0861b599ee700e5)
+
+Authorization:
+
+Basic Auth
+
 apps will be served on HTTP port:
 
 - user-api
