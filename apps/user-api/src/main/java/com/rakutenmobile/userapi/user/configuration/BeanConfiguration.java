@@ -25,6 +25,9 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.server.SecurityWebFilterChain;
+import org.springframework.web.bind.support.WebExchangeBindException;
+import org.springframework.web.reactive.function.client.WebClientResponseException;
+import org.springframework.web.server.ServerWebInputException;
 import org.springframework.web.server.UnsupportedMediaTypeStatusException;
 
 import java.util.Map;
@@ -61,7 +64,11 @@ public class BeanConfiguration {
                 UserNotFoundException.class, HttpStatus.UNAUTHORIZED,
                 IllegalArgumentException.class, HttpStatus.BAD_REQUEST,
                 DataIntegrityViolationException.class, HttpStatus.BAD_REQUEST,
-                UnsupportedMediaTypeStatusException.class, HttpStatus.UNSUPPORTED_MEDIA_TYPE
+                UnsupportedMediaTypeStatusException.class, HttpStatus.UNSUPPORTED_MEDIA_TYPE,
+                ServerWebInputException.class, HttpStatus.BAD_REQUEST,
+                WebClientResponseException.Unauthorized.class, HttpStatus.UNAUTHORIZED,
+                WebClientResponseException.Forbidden.class, HttpStatus.FORBIDDEN,
+                WebExchangeBindException.class, HttpStatus.BAD_REQUEST
         );
     }
 
