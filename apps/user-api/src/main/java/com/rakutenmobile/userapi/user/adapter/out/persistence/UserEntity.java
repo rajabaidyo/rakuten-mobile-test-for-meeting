@@ -14,5 +14,4 @@ public class UserEntity {
     private String name;
     private String password;
     private java.time.OffsetDateTime createdAt;
-    private java.time.OffsetDateTime deletedAt;
 }

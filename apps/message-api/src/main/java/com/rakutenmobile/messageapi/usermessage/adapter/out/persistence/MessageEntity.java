@@ -17,5 +17,4 @@ public class MessageEntity {
     private String topic;
     private String content;
     private java.time.OffsetDateTime createdAt;
-    private java.time.OffsetDateTime deletedAt;
 }

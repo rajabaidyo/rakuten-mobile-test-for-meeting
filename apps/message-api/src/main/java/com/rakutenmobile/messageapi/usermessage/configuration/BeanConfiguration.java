@@ -1,6 +1,7 @@
 package com.rakutenmobile.messageapi.usermessage.configuration;
 
 import com.rakutenmobile.messageapi.MessageApiApplication;
+import com.rakutenmobile.messageapi.lib.profanity.DefaultImpl;
 import com.rakutenmobile.messageapi.usermessage.adapter.in.restful.exception.DefaultGlobalExceptionHandler;
 import com.rakutenmobile.messageapi.usermessage.adapter.out.kafka.Publisher;
 import com.rakutenmobile.messageapi.usermessage.adapter.out.persistence.MessageRepository;

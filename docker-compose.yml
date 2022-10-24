@@ -19,7 +19,6 @@ services:
     hostname: schema_registry
     container_name: schema_registry
     depends_on:
-      - zookeeper
       - kafka
     deploy:
       restart_policy:
@@ -55,6 +54,24 @@ services:
       KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT
       KAFKA_INTER_BROKER_LISTENER_NAME: PLAINTEXT
       KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+
+  #ref: https://github.com/confluentinc/examples/blob/5.1.1-post/microservices-orders/docker-compose.yml#L182-L215
+  #do some minor modification, zookeeper -> bootstrap-server
+  kafka-setup:
+    image: confluentinc/cp-kafka:latest
+    hostname: kafka-setup
+    container_name: kafka-setup
+    depends_on:
+      - schema_registry
+    command: "bash -c 'echo Waiting for Kafka to be ready... && \
+                              cub kafka-ready -b kafka:29092 1 20 && \
+                              kafka-topics --create --if-not-exists --bootstrap-server kafka:29092 --partitions 1 --replication-factor 1 --topic send-message-docker && \
+                              kafka-topics --create --if-not-exists --bootstrap-server kafka:29092 --partitions 3 --replication-factor 1 --topic send-message-deadletter'"
+    environment:
+      # The following settings are listed here only to satisfy the image's requirements.
+      # We override the image's `command` anyways, hence this container will not start a broker.
+      KAFKA_BROKER_ID: ignored
+      KAFKA_ZOOKEEPER_CONNECT: ignored
 
   user-api-db:
     image: postgres
@@ -119,6 +136,6 @@ services:
         max_attempts: 5
         window: 120s
     depends_on:
-      - schema_registry
+      - kafka-setup
       - user-api
       - message-api-db

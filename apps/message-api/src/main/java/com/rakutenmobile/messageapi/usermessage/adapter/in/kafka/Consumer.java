@@ -3,6 +3,7 @@ package com.rakutenmobile.messageapi.usermessage.adapter.in.kafka;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.json.JsonMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+import com.rakutenmobile.messageapi.lib.profanity.Filter;
 import com.rakutenmobile.messageapi.usermessage.adapter.out.kafka.Publisher;
 import com.rakutenmobile.messageapi.usermessage.adapter.out.kafka.UserMessageDto;
 import com.rakutenmobile.messageapi.usermessage.domain.UserMessage;
@@ -39,12 +40,15 @@ public class Consumer implements ConsumeMessageUseCase, CommandLineRunner {
 
     private final DeadLetterPublishingRecoverer deadLetterPublishingRecoverer;
 
+    private final Filter profanityFilter;
+
     public Consumer(@Qualifier("kafka.topic.send-message") String kafkaTopic, ReceiverOptions<String, String> receiverOptions,
-                    MessageUseCase messageUseCase, DeadLetterPublishingRecoverer deadLetterPublishingRecoverer) {
+                    MessageUseCase messageUseCase, DeadLetterPublishingRecoverer deadLetterPublishingRecoverer, Filter profanityFilter) {
         this.kafkaTopic = kafkaTopic;
         this.receiverOptions = receiverOptions;
         this.messageUseCase = messageUseCase;
         this.deadLetterPublishingRecoverer = deadLetterPublishingRecoverer;
+        this.profanityFilter = profanityFilter;
     }
 
     @Override
@@ -73,15 +77,18 @@ public class Consumer implements ConsumeMessageUseCase, CommandLineRunner {
                                 .topic(dto.getTopic())
                                 .content(dto.getContent())
                                 .build();
-                        if (userMessage.getContent().equals("trigger error")) {
-                            throw new ReceiverRecordException(record, new RuntimeException("unprocessable message"));
+                        if (profanityFilter.check(userMessage.getContent())) {
+                            throw new ReceiverRecordException(record, new RuntimeException("message contain forbidden words"));
                         }
                         messageUseCase.submitMessage(userMessage).subscribe(v -> {
                             System.out.println("Success insert " + v.toString());
                             offset.acknowledge();
                         });
-                    } catch (Exception e) {
-                        throw new ReceiverRecordException(record, new RuntimeException("unprocessable message"));
+                    } catch (ReceiverRecordException e) {
+                        deadLetterPublishingRecoverer.accept(record, e);
+                    }
+                    catch (Exception e) {
+                        throw new ReceiverRecordException(record, new RuntimeException(e.getMessage()));
                     }
                 })
                 .doOnError(System.out::println)
