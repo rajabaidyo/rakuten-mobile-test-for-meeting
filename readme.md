@@ -60,6 +60,11 @@ Authorization:
 
 Basic Auth
 
+**Steps**
+
+1. Register your user
+2. Then use `userID` as username and `password` in basic Auth
+
 apps will be served on HTTP port:
 
 - user-api
