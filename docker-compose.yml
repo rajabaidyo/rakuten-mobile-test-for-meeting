@@ -1,5 +1,23 @@
 version: '3'
 services:
+  swagger:
+    image: swaggerapi/swagger-ui
+    depends_on:
+      - user-api
+      - message-api
+    deploy:
+      restart_policy:
+         condition: on-failure
+         delay: 5s
+         max_attempts: 5
+         window: 120s
+    ports:
+      - "8085:8080"
+    environment:
+      URL: ''
+      URLS: "[{ url: 'docs/apps/user-api/specs/openapi/user.yaml', name: 'user-api' }, { url: 'docs/apps/message-api/specs/openapi/message.yaml', name: 'message-api' }]"
+    volumes:
+      - .:/usr/share/nginx/html/docs/
   zookeeper:
     image: confluentinc/cp-zookeeper:latest
     deploy:

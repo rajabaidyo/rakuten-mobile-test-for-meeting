@@ -35,6 +35,7 @@ These projects are largely composed from"
 - maven
 - OpenAPI
 - Liquibase
+- Swagger-ui
 
 ## How to run
 
@@ -55,6 +56,8 @@ Postman collection:
 [user-api.json](misc/postman/user-api.postman_collection.json)
 
 [message-api.json](misc/postman/message-api.postman_collection.json)
+
+You could also see the API using swagger-ui. Just access `localhost:8085` after you have build the containers.
 
 Authorization:
 
@@ -80,6 +83,8 @@ apps will be served on HTTP port:
     - zookeeper: localhost:22181
     - topic: send-message-docker
     - dlt: send-message-deadletter
+- swagger-ui
+  - 8085
 
 Please look into apps/[x]/resources/application.properties
 
