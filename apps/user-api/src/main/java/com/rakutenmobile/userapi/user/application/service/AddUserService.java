@@ -5,11 +5,8 @@ import com.rakutenmobile.userapi.user.adapter.out.persistence.UserRepository;
 import com.rakutenmobile.userapi.user.application.port.in.AddUserUseCase;
 import com.rakutenmobile.userapi.user.domain.User;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Bean;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import reactor.core.publisher.Mono;
-
-import java.util.UUID;
 
 public class AddUserService implements AddUserUseCase {
 

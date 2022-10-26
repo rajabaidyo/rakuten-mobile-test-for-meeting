@@ -1,6 +1,5 @@
 package com.rakutenmobile.userapi.user.adapter.in.restful.auth;
 
-import lombok.Builder;
 import lombok.Data;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;

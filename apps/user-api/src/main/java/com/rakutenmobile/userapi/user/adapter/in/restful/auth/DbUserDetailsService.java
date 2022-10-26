@@ -30,11 +30,6 @@ public class DbUserDetailsService implements ReactiveUserDetailsService {
             authorities.add(new SimpleGrantedAuthority( "USER"));
             CustomUserDetails customUserDetails = new CustomUserDetails(v.getName(),
                     v.getUserId().toString(), v.getPassword(), v.getCreatedAt(), authorities);
-//            org.springframework.security.core.userdetails.User.UserBuilder userBuilder = org.springframework.security.core.userdetails.User.builder();
-//            UserDetails userDetail = userBuilder.username(v.getUserId().toString())
-//                    .password(v.getPassword())
-//                    .roles("USER")
-//                    .build();
             return customUserDetails;
         });
     }

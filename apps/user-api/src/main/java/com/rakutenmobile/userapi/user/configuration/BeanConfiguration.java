@@ -8,31 +8,24 @@ import com.rakutenmobile.userapi.user.application.port.out.GetUserUseCase;
 import com.rakutenmobile.userapi.user.application.service.AddUserService;
 import com.rakutenmobile.userapi.user.application.service.GetUserService;
 import com.rakutenmobile.userapi.user.domain.exception.UserNotFoundException;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnWebApplication;
 import org.springframework.boot.autoconfigure.web.WebProperties;
 import org.springframework.boot.web.reactive.error.DefaultErrorAttributes;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Profile;
 import org.springframework.core.annotation.Order;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.codec.ServerCodecConfigurer;
-import org.springframework.security.config.web.server.ServerHttpSecurity;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.web.server.SecurityWebFilterChain;
 import org.springframework.web.bind.support.WebExchangeBindException;
 import org.springframework.web.reactive.function.client.WebClientResponseException;
 import org.springframework.web.server.ServerWebInputException;
 import org.springframework.web.server.UnsupportedMediaTypeStatusException;
 
 import java.util.Map;
-
-import static org.springframework.security.config.Customizer.withDefaults;
 
 @Configuration
 @ComponentScan(basePackageClasses = UserApiApplication.class)
