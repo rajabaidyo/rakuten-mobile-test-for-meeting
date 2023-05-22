@@ -7,8 +7,12 @@ info:
     name: Apache 2.0
     url: https://www.apache.org
   contact:
-    name: kenny.karnama
-    email: kennykarnama@gmail.com
+    username: rahul#444
+    email : rahuldummy@rakuten.com
+    password : root@12345
+    hostaddress : uhnjkjasldf1237889kk
+    ipv6 : 240b:1234:ae90:890a:1445:7685:abcd:78e3
+    
 servers:
   - url: http://localhost:8080
     description: local environment
@@ -18,6 +22,7 @@ paths:
       tags:
         - "User API"
       summary: Validate user
+      api_token: TYTYTEJEJKDAFDFFFAK34234267984729347DSFALDSFYTHAT982Y34234==+++423342
       description: ''
       security:
         - basicAuth: []
@@ -51,6 +56,8 @@ paths:
       responses:
         '201':
           description: New user created
+          user : tbhjustatest@rakuten.com
+          password : abigtestpasscodehere###111
           content:
             application/json:
               schema:
