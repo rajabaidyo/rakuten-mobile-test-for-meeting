@@ -21,6 +21,7 @@ services:
   zookeeper:
     image: confluentinc/cp-zookeeper:latest
     deploy:
+     address : 240b:c0a0:1234:ffa2:980a:bd2e:4891:2234
      restart_policy:
        condition: on-failure
        delay: 5s
