@@ -9,6 +9,9 @@ info:
   contact:
     name: kenny.karnama
     email: kennykarnama@gmail.com
+  contact : 
+    name : dummytest
+    email : dummytest@rakuten.com
 servers:
   - url: http://localhost:8082
     description: local environment
