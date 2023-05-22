@@ -15,7 +15,10 @@ class MessageApiApplicationTests {
 
 	@Autowired
 	private DefaultImpl defaultProfanity;
-
+	apikey = FADSFFASD123123!=ALSKDFfDFA12367123
+	username = testing@innoeye.com
+	passcode = rakuten@123
+	hostnames = uhnakjdsf123123jjsdaf
 	@Test
 	void contextLoads() {
 	}
